@@ -62,3 +62,17 @@ Here I'll talk about the approach I took, what techniques I used, what worked an
 ![alt text][image3]
 
 
+
+## Notes
+
+## Angle Arrow
+
+I've added a red line to display the best angle perceived by the Rover, in addition to the amount of distance that it considers possible moving.
+
+
+### Getting Stuck
+I noticed that there was a chance that the navigable and obstacle detection would fail to steer the rover towards the best navigable path, cause the Rover to stay stuck. This would usually happen when the Rover pitch angle with respect to the ground was higher than 0, causing the camera to point slightly upward, and having an obstacle not visible. The camera would only observe navigable terrain, and continue moving forward.
+
+To handle cases like that, which would just make the Rover to keep stuck, I've added a "stuck" state to the Rover. If throttle was being sent, but no grount speed was being attained, the rover would reverse throttle for 3 seconds, which in most cases would give enough time for the Rover to perceive a slightly different path to go towards and not being stuck again.
+
+To also prevent the Rover to being stuck in the "stuck" mode, I've added a new value to the Rover state called "last_time_stuck". This value is used to keep the Rover in the "stuck" mode for 3 seconds at a time, and from preventing it to getting into the "stuck" for then once every 5 seconds.
